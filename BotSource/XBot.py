@@ -34,6 +34,8 @@ if __name__ == '__main__':
     #r = praw.Reddit(user_agent='Basic Python Script V0.2 by /u/pluto7443')
     
     commandList = ['permission', '\nhelp', '\nuserinfo', '\ngreetings', '\nechothis', '\nuptime', '\nrespond']
+    normalServerList = ['129103948807274496', '133665049406472192', '138663583507677184']
+    unlimitedServerList = ['129103948807274496']
     #Remember to add commands to this list!
     
     #For uptime command
@@ -56,7 +58,7 @@ if __name__ == '__main__':
         counter = counter + 1
         if ((counter == 0) or ((time.time() - commandCD) >= cooldown)):
                 #For commands anyone can use
-            if (message.author.id != client.user.id) and (message.channel.id == (129103948807274496) or (133665049406472192) or (138663583507677184)):
+            if (message.author.id != client.user.id) and (message.channel.id in normalServerList):
                 if message.content.startswith('XBot permission'):
                     userID = message.author.id
                     userInfo = ['UserID: ', userID]
@@ -175,18 +177,18 @@ if __name__ == '__main__':
                         print('Accepted invite to ' + message.content)
                 
                 
-                if ((message.author.id != client.user.id) and (message.server.id == (129103948807274496))):
-                    
-                    if ((message.content.startswith('rip')) or (message.content.startswith('Rip')) or (message.content.startswith('RIP'))):
-                        client.send_message(message.channel, 'RIP in pepperonis. ')
-                        global commandCD
-                        commandCD = time.time()
-                    
-                    
-                    if ((message.content.startswith('lol')) or (message.content.startswith('Lol')) or (message.content.startswith('LOL'))):
-                        client.send_message(message.channel, 'lol')
-                        global commandCD
-                        commandCD = time.time()
+            if ((message.author.id != client.user.id) and (message.server.id in unlimitedServerList)):
+                
+                if ((message.content.startswith('rip')) or (message.content.startswith('Rip')) or (message.content.startswith('RIP'))):
+                    client.send_message(message.channel, 'RIP in pepperonis. ')
+                    global commandCD
+                    commandCD = time.time()
+                
+                
+                if ((message.content.startswith('lol')) or (message.content.startswith('Lol')) or (message.content.startswith('LOL'))):
+                    client.send_message(message.channel, 'lol')
+                    global commandCD
+                    commandCD = time.time()
                 
                 
                 
