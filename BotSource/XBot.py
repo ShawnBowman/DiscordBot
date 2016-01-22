@@ -109,16 +109,7 @@ if __name__ == '__main__':
                     commandCD = time.time()
                 
                 
-                if ((message.content.startswith('rip')) or (message.content.startswith('Rip')) or (message.content.startswith('RIP'))):
-                    client.send_message(message.channel, 'RIP in pepperonis. ')
-                    global commandCD
-                    commandCD = time.time()
-                    
-                    
-                if ((message.content.startswith('lol')) or (message.content.startswith('Lol')) or (message.content.startswith('LOL'))):
-                    client.send_message(message.channel, 'lol')
-                    global commandCD
-                    commandCD = time.time()
+                
                     
                 if message.content.startswith('XBot uptime'):
                     upTime =  time.time() - currentTime
@@ -156,6 +147,10 @@ if __name__ == '__main__':
                         messageChannel = message.channel.id 
                         client.send_message(message.channel, messageChannel) 
                     
+                    if message.content.startswith('XBot server'):
+                        messageServer = message.server.id 
+                        client.send_message(message.channel, messageServer) 
+                    
                     if message.content.startswith('XBot game'):
                         splitMessage = message.content.split(' ')
                         togetherMessage = ' '.join(splitMessage[2:])
@@ -179,7 +174,20 @@ if __name__ == '__main__':
                         client.accept_invite(message.content)
                         print('Accepted invite to ' + message.content)
                 
-            
+                
+                if ((message.author.id != client.user.id) and (message.server.id == (129103948807274496))):
+                    
+                    if ((message.content.startswith('rip')) or (message.content.startswith('Rip')) or (message.content.startswith('RIP'))):
+                        client.send_message(message.channel, 'RIP in pepperonis. ')
+                        global commandCD
+                        commandCD = time.time()
+                    
+                    
+                    if ((message.content.startswith('lol')) or (message.content.startswith('Lol')) or (message.content.startswith('LOL'))):
+                        client.send_message(message.channel, 'lol')
+                        global commandCD
+                        commandCD = time.time()
+                
                 
                 
             
