@@ -34,8 +34,8 @@ if __name__ == '__main__':
     #r = praw.Reddit(user_agent='Basic Python Script V0.2 by /u/pluto7443')
     
     commandList = ['permission', '\nhelp', '\nuserinfo', '\ngreetings', '\nechothis', '\nuptime', '\nrespond']
-    normalServerList = ['129103948807274496', '133665049406472192', '138663583507677184']
-    unlimitedServerList = ['129103948807274496']
+    unlimitedServerList = ['129103948807274496', '137993055625019392', '131563686115540992']
+    normalServerList = ['133665049406472192', '138663583507677184', '138471957682192384'] + unlimitedServerList
     #Remember to add commands to this list!
     
     #For uptime command
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     
     
     global cooldown
-    cooldown = 0.25    
+    cooldown = 0.5    
     
     
    
@@ -95,24 +95,18 @@ if __name__ == '__main__':
                     commandCD = time.time()
                     
                 if message.content.startswith('XBot echothis'):
-                    client.delete_message
-                    splitMessage = message.content.split(' ')
-                    togetherMessage = ' '.join(splitMessage[2:])
-                    client.send_message(message.channel, togetherMessage)
-                    global commandCD
-                    commandCD = time.time()
-                        
-                if message.content.startswith('XBot mention'):
-                    client.delete_message
-                    splitMessage = message.content.split(' ')
-                    togetherMessage = ' '.join(splitMessage[2:])
-                    client.send_message(message.channel, togetherMessage)
-                    global commandCD
-                    commandCD = time.time()
-                
-                
-                
                     
+                    splitMessage = message.content.split(' ')
+                    togetherMessage = ' '.join(splitMessage[2:])
+                    client.send_message(message.channel, togetherMessage)
+                    if (message.author.id == '128732264451407872'):
+                        client.send_message(message.channel, 'Sent by ' + message.author.name)
+                    client.delete_message(message)
+                    print(message.author.name)
+                    global commandCD
+                    commandCD = time.time()
+                
+                
                 if message.content.startswith('XBot uptime'):
                     upTime =  time.time() - currentTime
                     if upTime >= 60:
@@ -143,40 +137,40 @@ if __name__ == '__main__':
                     
                 
                 #Commands only someone with their id in the if statement can use
-                if ((message.author.id != client.user.id) and ((message.author.id == '111993480313589760')) or message.author.id == (128618072503353344)):
-                    
-                    if message.content.startswith('XBot channel'):
-                        messageChannel = message.channel.id 
-                        client.send_message(message.channel, messageChannel) 
-                    
-                    if message.content.startswith('XBot server'):
-                        messageServer = message.server.id 
-                        client.send_message(message.channel, messageServer) 
-                    
-                    if message.content.startswith('XBot game'):
-                        splitMessage = message.content.split(' ')
-                        togetherMessage = ' '.join(splitMessage[2:])
-                        client.change_status(game=discord.Game(name=togetherMessage))
-                        print('New game is: ' + togetherMessage)
-                        
-                    if message.content.startswith('XBot sleep'):
-                        client.send_message(message.channel, 'Goodbye sir! \n*is ded*')
-                        client.logout()
-                        print('Stopped.')
-                        exit
-                    
-                    if message.content.startswith('XBot cd '):
-                        splitMessage = message.content.split(' ')
-                        togetherMessage = ' '.join(splitMessage[2:])
-                        global cooldown
-                        cooldown = float(togetherMessage)
-                        print(togetherMessage)
-                    
-                    if message.content.startswith('https://discord.gg'):
-                        client.accept_invite(message.content)
-                        print('Accepted invite to ' + message.content)
+            if ((message.author.id != client.user.id) and (message.author.id == '111993480313589760')):
                 
+                if message.content.startswith('XBot channel'):
+                    messageChannel = message.channel.id 
+                    client.send_message(message.channel, messageChannel) 
                 
+                if message.content.startswith('XBot server'):
+                    messageServer = message.server.id 
+                    client.send_message(message.channel, messageServer) 
+                
+                if message.content.startswith('XBot game'):
+                    splitMessage = message.content.split(' ')
+                    togetherMessage = ' '.join(splitMessage[2:])
+                    client.change_status(game=discord.Game(name=togetherMessage))
+                    print('New game is: ' + togetherMessage)
+                    
+                if message.content.startswith('XBot sleep'):
+                    client.send_message(message.channel, 'Goodbye sir! \n*is ded*')
+                    client.logout()
+                    print('Stopped.')
+                    exit
+                
+                if message.content.startswith('XBot cd '):
+                    splitMessage = message.content.split(' ')
+                    togetherMessage = ' '.join(splitMessage[2:])
+                    global cooldown
+                    cooldown = float(togetherMessage)
+                    print(togetherMessage)
+                
+                if message.content.startswith('https://discord.gg'):
+                    client.accept_invite(message.content)
+                    print('Accepted invite to ' + message.content)
+                
+                #Only on unlimitedServers.
             if ((message.author.id != client.user.id) and (message.server.id in unlimitedServerList)):
                 
                 if ((message.content.startswith('rip')) or (message.content.startswith('Rip')) or (message.content.startswith('RIP'))):
@@ -187,6 +181,14 @@ if __name__ == '__main__':
                 
                 if ((message.content.startswith('lol')) or (message.content.startswith('Lol')) or (message.content.startswith('LOL'))):
                     client.send_message(message.channel, 'lol')
+                    global commandCD
+                    commandCD = time.time()
+                    
+                if message.content.startswith('XBot dance'):
+                    client.send_message(message.channel, '    ,,,,,,,,\n   (•\_•) \n \_/[ ]\\\_ \n    /  \ ')
+                    client.send_message(message.channel, '    ,,,,,,,,\n\\ (< <) \n   \\\[ ]\\\_ \n    /  \ ')
+                    client.send_message(message.channel, '    ,,,,,,,,\n   (> >) \/ \n \_/[ ]\/ \n    /  \ ')
+                    client.send_message(message.channel, '    ,,,,,,,\n\\ (^\_^) \/ \n   \\\[ ]\/ \n    /  \ ')
                     global commandCD
                     commandCD = time.time()
                 
