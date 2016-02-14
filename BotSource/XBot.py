@@ -4,13 +4,12 @@ Created on Jan 16, 2016
 @author: shawn
 '''
 import discord
-import praw
 import time
 import math
 import markovify
-import Login
+import sys
+from ModFunctions import modFunction
 from Login import login, password
-from time import sleep
 
 
 
@@ -29,9 +28,6 @@ if __name__ == '__main__':
     #This is the function with example values: 
         #client = discord.Client()
         #client.login('bot acc login', 'bot acc password')
-    
-    #reddit tasks
-    #r = praw.Reddit(user_agent='Basic Python Script V0.2 by /u/pluto7443')
     
     commandList = ['permission', '\nhelp', '\nuserinfo', '\ngreetings', '\nechothis', '\nuptime', '\nrespond']
     unlimitedServerList = ['129103948807274496', '137993055625019392', '131563686115540992']
@@ -139,6 +135,12 @@ if __name__ == '__main__':
                 #Commands only someone with their id in the if statement can use
             if ((message.author.id != client.user.id) and (message.author.id == '111993480313589760')):
                 
+                if message.content.startswith('XBot mod'):
+                    splitMessage = message.content.split(' ')
+                    command = (splitMessage[2])
+                    modFunction(client, command, message)
+                    
+                
                 if message.content.startswith('XBot channel'):
                     messageChannel = message.channel.id 
                     client.send_message(message.channel, messageChannel) 
@@ -157,7 +159,7 @@ if __name__ == '__main__':
                     client.send_message(message.channel, 'Goodbye sir! \n*is ded*')
                     client.logout()
                     print('Stopped.')
-                    exit
+                    sys.exit()
                 
                 if message.content.startswith('XBot cd '):
                     splitMessage = message.content.split(' ')
