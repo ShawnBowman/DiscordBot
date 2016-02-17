@@ -25,3 +25,18 @@ def modFunction(client, command, message):
                 perms = role.permissions
                 perms.can_send_messages = True
                 Client.edit_role(message.server, role, permissions = perms)
+                
+def searchFunction(client, search):
+    searchArray = search.split(' ')
+    searchString = "https://www.google.ca/search?q="
+    for x in range (0, len(searchArray)):
+        searchString = searchString + searchArray[x]
+    
+    NewSearch = urllib.request.geturl(searchString)
+    
+    
+    
+    
+    
+    
+    

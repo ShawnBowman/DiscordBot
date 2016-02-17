@@ -8,7 +8,9 @@ import time
 import math
 import markovify
 import sys
-from ModFunctions import modFunction
+import googleapiclient
+import urllib.request
+from LargeFunctions import modFunction, searchFunction
 from Login import login, password
 
 
@@ -140,6 +142,11 @@ if __name__ == '__main__':
                     command = (splitMessage[2])
                     modFunction(client, command, message)
                     
+                
+                if message.content.startswith('XBot search'):
+                    splitMessage = message.content.split(' ')
+                    search = (splitMessage[2:])
+                    searchFunction(client, search)
                 
                 if message.content.startswith('XBot channel'):
                     messageChannel = message.channel.id 
