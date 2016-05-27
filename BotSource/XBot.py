@@ -8,32 +8,31 @@ import time
 import math
 import markovify
 import sys
-import googleapiclient
-import urllib.request
+import asyncio
 from LargeFunctions import modFunction, searchFunction
-from Login import login, password
+from Login import token
 
 
+
+global commandCD
+commandCD = 0
 
 #Message channels
 #133665049406472192
 #129103948807274496
-global commandCD
-commandCD = time.time()
-
 
 if __name__ == '__main__':
     #Discord client tasks
     client = discord.Client()
-    client.login(login, password)
     #This is a simple two line function that logs the bot in. I keep it out of the repository to hide the bot's login info.
     #This is the function with example values: 
         #client = discord.Client()
         #client.login('bot acc login', 'bot acc password')
     
     commandList = ['permission', '\nhelp', '\nuserinfo', '\ngreetings', '\nechothis', '\nuptime', '\nrespond']
-    unlimitedServerList = ['129103948807274496', '137993055625019392', '131563686115540992']
+    unlimitedServerList = ['129103948807274496', '137993055625019392', '131563686115540992', '126396996633362432']
     normalServerList = ['133665049406472192', '138663583507677184', '138471957682192384'] + unlimitedServerList
+    ModRoleList = ["Master", "Assistant to the Master", "Frame.", "Reliant.", "Admins.", "Online?"] 
     #Remember to add commands to this list!
     
     #For uptime command
@@ -46,11 +45,12 @@ if __name__ == '__main__':
     
     
     global cooldown
-    cooldown = 0.5    
+    cooldown = 0.5
     
     
+        
    
-    @client.event
+    @client.async_event
     def on_message(message):
         counter = 0
         counter = counter + 1
@@ -61,15 +61,15 @@ if __name__ == '__main__':
                     userID = message.author.id
                     userInfo = ['UserID: ', userID]
                     infoString = ' '.join(userInfo)
-                    client.send_message(message.channel, "``` \n {} \n ```".format(infoString))
-                    global commandCD
+                    yield client.send_message(message.channel, "``` \n {} \n ```".format(infoString))
                     commandCD = time.time()
                 
                 if message.content.startswith('XBot help'):
                     client.send_message(message.channel, 'My list of commands. All are prefaced by XBot and are caps sensitive.')
                     commandString = ' '.join(commandList)
-                    client.send_message(message.channel, "``` \n {} \n ```".format(commandString))
+                    yield from client.send_message(message.channel, "``` \n {} \n ```".format(commandString))
                     global commandCD
+                    global cooldown
                     commandCD = time.time()
                         
                 if message.content.startswith('XBot userinfo'):
@@ -78,18 +78,15 @@ if __name__ == '__main__':
                     userInfo = ['User: ', userName, '\nUserID: ', userID]
                     infoString = ' '.join(userInfo)
                     client.send_message(message.channel, "``` \n {} \n ```".format(infoString))
-                    global commandCD
                     commandCD = time.time()
                     
                     
                 if message.content.startswith('Xbox'):
                     client.send_message(message.channel, 'PCMasterrace, you pleb.')
-                    global commandCD
                     commandCD = time.time()
                 
                 if message.content.startswith('(╯°□°）╯︵ ┻━┻'):
                     client.send_message(message.channel, '┬─┬﻿ ノ( ゜-゜ノ)')
-                    global commandCD
                     commandCD = time.time()
                     
                 if message.content.startswith('XBot echothis'):
@@ -101,7 +98,6 @@ if __name__ == '__main__':
                         client.send_message(message.channel, 'Sent by ' + message.author.name)
                     client.delete_message(message)
                     print(message.author.name)
-                    global commandCD
                     commandCD = time.time()
                 
                 
@@ -111,18 +107,15 @@ if __name__ == '__main__':
                         upTimeMinutes = upTime/60
                         upTimeMinutes = math.ceil(upTimeMinutes)
                         client.send_message(message.channel, str(upTimeMinutes) + ' minutes.')
-                        global commandCD
                         commandCD = time.time()
                     else:
                         upTime = math.ceil(upTime)
                         client.send_message(message.channel, str(upTime) + ' seconds.')
-                        global commandCD
                         commandCD = time.time()
                         
                 
                 if message.content.startswith('XBot greetings'):
                     client.send_message(message.channel, 'Hi sir! My maker is Xaiux.')
-                    global commandCD
                     commandCD = time.time()
                     
                     #client.send_message(message.channel, message.channel.id)
@@ -130,7 +123,6 @@ if __name__ == '__main__':
                 if message.content.startswith('XBot respond'):
                     text_model = markovify.Text(text)
                     client.send_message(message.channel, text_model.make_sentence())
-                    global commandCD
                     commandCD = time.time()
                     
                 
@@ -171,7 +163,6 @@ if __name__ == '__main__':
                 if message.content.startswith('XBot cd '):
                     splitMessage = message.content.split(' ')
                     togetherMessage = ' '.join(splitMessage[2:])
-                    global cooldown
                     cooldown = float(togetherMessage)
                     print(togetherMessage)
                 
@@ -184,13 +175,11 @@ if __name__ == '__main__':
                 
                 if ((message.content.startswith('rip')) or (message.content.startswith('Rip')) or (message.content.startswith('RIP'))):
                     client.send_message(message.channel, 'RIP in pepperonis. ')
-                    global commandCD
                     commandCD = time.time()
                 
                 
                 if ((message.content.startswith('lol')) or (message.content.startswith('Lol')) or (message.content.startswith('LOL'))):
                     client.send_message(message.channel, 'lol')
-                    global commandCD
                     commandCD = time.time()
                     
                 if message.content.startswith('XBot dance'):
@@ -198,14 +187,13 @@ if __name__ == '__main__':
                     client.send_message(message.channel, '    ,,,,,,,,\n\\ (< <) \n   \\\[ ]\\\_ \n    /  \ ')
                     client.send_message(message.channel, '    ,,,,,,,,\n   (> >) \/ \n \_/[ ]\/ \n    /  \ ')
                     client.send_message(message.channel, '    ,,,,,,,\n\\ (^\_^) \/ \n   \\\[ ]\/ \n    /  \ ')
-                    global commandCD
                     commandCD = time.time()
                 
                 
                 
             
             
-@client.event
+@client.async_event
 def on_ready():
     print('Logged in as')
     print(client.user.name)
@@ -214,4 +202,4 @@ def on_ready():
 
 
 
-client.run()
+client.run(token)

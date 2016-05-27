@@ -4,27 +4,32 @@ Created on Feb 13, 2016
 @author: shawn
 '''
 
+import googleapiclient
+import urllib
+
+ModRoleList = ["Master", "Assistant to the Master", "Frame.", "Reliant.", "Admins."] 
 
 def modFunction(client, command, message):
     Client = client
     
+    
     if command == "MuteChannel":
-        print("Channel muted.")
         RolesList = message.server.roles
         for role in RolesList:
-            if (role.name != "Master") or (role.name != "Assistant to the Master"):
+            if (role.name not in ModRoleList):
                 perms = role.permissions
                 perms.can_send_messages = False
                 Client.edit_role(message.server, role, permissions = perms)
+                print("Channel muted.")
                 
     if command == "UnMuteChannel":
-        print("Channel unmuted.")
         RolesList = message.server.roles
         for role in RolesList:
-            if (role.name != "Master") or (role.name != "Assistant to the Master"):
+            if (role.name not in ModRoleList):
                 perms = role.permissions
                 perms.can_send_messages = True
                 Client.edit_role(message.server, role, permissions = perms)
+                print("Channel unmuted.")
                 
 def searchFunction(client, search):
     searchArray = search.split(' ')
@@ -32,7 +37,7 @@ def searchFunction(client, search):
     for x in range (0, len(searchArray)):
         searchString = searchString + searchArray[x]
     
-    NewSearch = urllib.request.geturl(searchString)
+    urllib.request.urlopen(searchString)
     
     
     
