@@ -4,8 +4,10 @@ Created on Feb 13, 2016
 @author: shawn
 '''
 
-import googleapiclient
 import urllib
+
+import googleapiclient
+
 
 ModRoleList = ["Master", "Assistant to the Master", "Frame.", "Reliant.", "Admins."] 
 
@@ -19,7 +21,7 @@ def modFunction(client, command, message):
             if (role.name not in ModRoleList):
                 perms = role.permissions
                 perms.can_send_messages = False
-                Client.edit_role(message.server, role, permissions = perms)
+                yield from Client.edit_role(message.server, role, permissions = perms)
                 print("Channel muted.")
                 
     if command == "UnMuteChannel":
@@ -28,7 +30,7 @@ def modFunction(client, command, message):
             if (role.name not in ModRoleList):
                 perms = role.permissions
                 perms.can_send_messages = True
-                Client.edit_role(message.server, role, permissions = perms)
+                yield from Client.edit_role(message.server, role, permissions = perms)
                 print("Channel unmuted.")
                 
 def searchFunction(client, search):

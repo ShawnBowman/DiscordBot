@@ -3,19 +3,21 @@ Created on Jan 16, 2016
 
 @author: shawn
 '''
-import discord
-import time
-import math
-import markovify
-import sys
 import asyncio
+import math
+import sys
+import time
+
+import discord
+import markovify
+
 from LargeFunctions import modFunction, searchFunction
 from Login import token
 
 
-
 global commandCD
 commandCD = 0
+client = discord.Client()
 
 #Message channels
 #133665049406472192
@@ -23,20 +25,19 @@ commandCD = 0
 
 if __name__ == '__main__':
     #Discord client tasks
-    client = discord.Client()
     #This is a simple two line function that logs the bot in. I keep it out of the repository to hide the bot's login info.
     #This is the function with example values: 
         #client = discord.Client()
         #client.login('bot acc login', 'bot acc password')
     
     commandList = ['permission', '\nhelp', '\nuserinfo', '\ngreetings', '\nechothis', '\nuptime', '\nrespond']
-    unlimitedServerList = ['129103948807274496', '137993055625019392', '131563686115540992', '126396996633362432']
+    unlimitedServerList = ['129103948807274496', '137993055625019392', '131563686115540992', '126396996633362432', '205172292077092873', '129103948807274496']
     normalServerList = ['133665049406472192', '138663583507677184', '138471957682192384'] + unlimitedServerList
     ModRoleList = ["Master", "Assistant to the Master", "Frame.", "Reliant.", "Admins.", "Online?"] 
     #Remember to add commands to this list!
     
     #For uptime command
-    currentTime = time.time()
+    startTime = time.time()
     
     #for markovify business
     # Get raw text as string.
@@ -61,7 +62,7 @@ if __name__ == '__main__':
                     userID = message.author.id
                     userInfo = ['UserID: ', userID]
                     infoString = ' '.join(userInfo)
-                    yield client.send_message(message.channel, "``` \n {} \n ```".format(infoString))
+                    yield from client.send_message(message.channel, "``` \n {} \n ```".format(infoString))
                     commandCD = time.time()
                 
                 if message.content.startswith('XBot help'):
@@ -77,7 +78,7 @@ if __name__ == '__main__':
                     userID = message.author.id
                     userInfo = ['User: ', userName, '\nUserID: ', userID]
                     infoString = ' '.join(userInfo)
-                    client.send_message(message.channel, "``` \n {} \n ```".format(infoString))
+                    yield from client.send_message(message.channel, "``` \n {} \n ```".format(infoString))
                     commandCD = time.time()
                     
                     
@@ -93,36 +94,35 @@ if __name__ == '__main__':
                     
                     splitMessage = message.content.split(' ')
                     togetherMessage = ' '.join(splitMessage[2:])
-                    client.send_message(message.channel, togetherMessage)
-                    if (message.author.id == '128732264451407872'):
-                        client.send_message(message.channel, 'Sent by ' + message.author.name)
-                    client.delete_message(message)
+                    yield from client.send_message(message.channel, togetherMessage)
+                    yield from client.send_message(message.channel, 'Sent by ' + message.author.name)
+                    yield from client.delete_message(message)
                     print(message.author.name)
                     commandCD = time.time()
                 
                 
                 if message.content.startswith('XBot uptime'):
-                    upTime =  time.time() - currentTime
+                    upTime =  time.time() - startTime
                     if upTime >= 60:
                         upTimeMinutes = upTime/60
-                        upTimeMinutes = math.ceil(upTimeMinutes)
-                        client.send_message(message.channel, str(upTimeMinutes) + ' minutes.')
+                        #upTimeMinutes = math.ceil(upTimeMinutes)
+                        yield from client.send_message(message.channel, str(upTimeMinutes) + ' minutes.')
                         commandCD = time.time()
                     else:
-                        upTime = math.ceil(upTime)
-                        client.send_message(message.channel, str(upTime) + ' seconds.')
+                        #upTime = math.ceil(upTime)
+                        yield from client.send_message(message.channel, str(upTime) + ' seconds.')
                         commandCD = time.time()
                         
                 
                 if message.content.startswith('XBot greetings'):
-                    client.send_message(message.channel, 'Hi sir! My maker is Xaiux.')
+                    yield from client.send_message(message.channel, 'Hi sir! My maker is Xaiux.')
                     commandCD = time.time()
                     
                     #client.send_message(message.channel, message.channel.id)
                         
                 if message.content.startswith('XBot respond'):
                     text_model = markovify.Text(text)
-                    client.send_message(message.channel, text_model.make_sentence())
+                    yield from client.send_message(message.channel, text_model.make_sentence())
                     commandCD = time.time()
                     
                 
@@ -142,21 +142,21 @@ if __name__ == '__main__':
                 
                 if message.content.startswith('XBot channel'):
                     messageChannel = message.channel.id 
-                    client.send_message(message.channel, messageChannel) 
+                    yield from client.send_message(message.channel, messageChannel) 
                 
                 if message.content.startswith('XBot server'):
                     messageServer = message.server.id 
-                    client.send_message(message.channel, messageServer) 
+                    yield from client.send_message(message.channel, messageServer) 
                 
                 if message.content.startswith('XBot game'):
                     splitMessage = message.content.split(' ')
                     togetherMessage = ' '.join(splitMessage[2:])
-                    client.change_status(game=discord.Game(name=togetherMessage))
+                    yield from client.change_status(game=discord.Game(name=togetherMessage))
                     print('New game is: ' + togetherMessage)
                     
                 if message.content.startswith('XBot sleep'):
-                    client.send_message(message.channel, 'Goodbye sir! \n*is ded*')
-                    client.logout()
+                    yield from client.send_message(message.channel, 'Goodbye sir! \n*is ded*')
+                    yield from client.logout()
                     print('Stopped.')
                     sys.exit()
                 
@@ -183,10 +183,10 @@ if __name__ == '__main__':
                     commandCD = time.time()
                     
                 if message.content.startswith('XBot dance'):
-                    client.send_message(message.channel, '    ,,,,,,,,\n   (•\_•) \n \_/[ ]\\\_ \n    /  \ ')
-                    client.send_message(message.channel, '    ,,,,,,,,\n\\ (< <) \n   \\\[ ]\\\_ \n    /  \ ')
-                    client.send_message(message.channel, '    ,,,,,,,,\n   (> >) \/ \n \_/[ ]\/ \n    /  \ ')
-                    client.send_message(message.channel, '    ,,,,,,,\n\\ (^\_^) \/ \n   \\\[ ]\/ \n    /  \ ')
+                    yield from client.send_message(message.channel, '.    ,,,,,,,,\n   (•\_•) \n \_/[ ]\\\_ \n    /  \ ')
+                    yield from client.send_message(message.channel, '.    ,,,,,,,,\n\\ (< <) \n   \\\[ ]\\\_ \n    /  \ ')
+                    yield from client.send_message(message.channel, '.    ,,,,,,,,\n   (> >) \/ \n \_/[ ]\/ \n    /  \ ')
+                    yield from client.send_message(message.channel, '.    ,,,,,,,\n\\ (^\_^) \/ \n   \\\[ ]\/ \n    /  \ ')
                     commandCD = time.time()
                 
                 
